@@ -1,28 +1,63 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Add a default marker to a web map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+  </head>
+  <body>
+    <div id="map"></div>
+     
+    <script>
+        // TO MAKE THE MAP APPEAR YOU MUST
+        // ADD YOUR ACCESS TOKEN FROM
+        // https://account.mapbox.com
+        mapboxgl.accessToken = 'CHANGEME';
+      const map = new mapboxgl.Map({
+              container: 'map',
+              // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+              style: 'mapbox://styles/mapbox/streets-v12',
+              center: [0.1276, 51.5072],
+              zoom: 8
+            });
+       
 
-  <script>
-  async function fetchLocations() {
-      const locations = [];
+      async function fetchLocations() {
+          const locations = [];
 
-      let postcodes = ["WC1A 2JX", "SW1A 0AA"];
+          let postcodes = ["WC1A 2JX", "SW1A 0AA"];
 
-      for (const postcode of postcodes) {
-          const response = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
-          const data = await response.json();
-          if (data && data.result) {
-          locations.push(data.result);
+          for (const postcode of postcodes) {
+              const response = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
+              const data = await response.json();
+              if (data && data.result) {
+              locations.push(data.result);
+              }
           }
+
+          return locations;
       }
 
-      return locations;
-  }
+      fetchLocations().then((yolo) => {
+        console.log(yolo);
+        // Create a default Marker and add it to the map.
+        // TODO loop over yolo instead.
+        const marker1 = new mapboxgl.Marker()
+        .setLngLat([yolo[0].longitude, yolo[0].latitude])
+        .addTo(map);
 
-  fetchLocations().then((yolo) => {
-    console.log(yolo);
-    // Populate map code
-  })
+        const marker2 = new mapboxgl.Marker()
+        .setLngLat([yolo[1].longitude, yolo[1].latitude])
+        .addTo(map);
+      })
   
-  </script>
-
+    </script>
+     
+  </body>
 </html>
