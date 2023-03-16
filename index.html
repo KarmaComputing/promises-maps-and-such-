@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+  <script>
+  async function fetchLocations() {
+      const locations = [];
+
+      let postcodes = ["WC1A 2JX", "SW1A 0AA"];
+
+      for (const postcode of postcodes) {
+          const response = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
+          const data = await response.json();
+          if (data && data.result) {
+          locations.push(data.result);
+          }
+      }
+
+      return locations;
+  }
+
+  fetchLocations().then((yolo) => {
+    console.log(yolo);
+    // Populate map code
+  })
+  
+  </script>
+
+</html>
